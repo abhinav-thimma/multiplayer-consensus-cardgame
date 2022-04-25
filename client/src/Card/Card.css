@@ -1,0 +1,20 @@
+.message-item-square {
+    width: 150px;
+    height: 150px;
+    margin: 8px;
+    padding: 10px 10px 10px 10px;
+    word-break: break-word;
+    border-radius: 4px;
+    color: white;
+}
+
+.my-message {
+    background-color: rgb(0, 132, 255);
+    margin: 10px;
+    padding: 10px 10px 10px 10px;
+}
+
+.received-message {
+    background-color: #3f4042;
+    margin-right: auto;
+}
