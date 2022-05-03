@@ -5,15 +5,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css";
 import Home from "./Home/Home";
 import Room from "./Room/Room";
-import Survey from "./Survey/Survey";
+import EndPage from "./EndPage/EndPage";
 
 function App() {
   return (
     <Router>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/:roomId" component={Room} />
-        {/* <Route exact path="/:roomId/survey" component={Survey} /> */}
+        <Route exact path="/room/:roomId" component={Room} />
+        <Route exact path="/thanks" component={EndPage} />
       </Switch>
     </Router>
   );

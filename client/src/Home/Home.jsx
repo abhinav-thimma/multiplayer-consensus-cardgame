@@ -18,7 +18,7 @@ const Home = () => {
         onChange={handleRoomNameChange}
         className="text-input-field"
       />
-      <a href={`/${roomName}`} className="enter-room-button">
+      <a href={`/room/${roomName}`} className="enter-room-button">
         Join room
       </a>
     </div>

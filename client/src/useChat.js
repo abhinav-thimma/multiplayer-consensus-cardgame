@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import socketIOClient from "socket.io-client";
 
+// Message types
 const NEW_CARD_MESSAGE_EVENT = "newCardMessage";
 const ROUND_MESSAGE_EVENT = "roundMessage";
 const NEW_JOIN_EVENT = "newJoin";
+const GAME_END_EVENT = "gameEnd";
+const ROOM_END_EVENT = "roomEnd";
+
 const SOCKET_SERVER_URL = "http://localhost:4000";
 
 const useChat = (roomId) => {
@@ -11,9 +15,10 @@ const useChat = (roomId) => {
   const [ round, setRound ] = useState(1);
   const [ members, setMembers ] = useState([]);
   const [ cardSentForRound, setCardSentForRound ] = useState(0);
+  const [ gameEnd, setGameEnd ] = useState(false);
+  const [ roomEnd, setRoomEnd ] = useState(false);
   const socketRef = useRef();
 
-  
   useEffect(() => {
     socketRef.current = socketIOClient(SOCKET_SERVER_URL, {
       query: { roomId },
@@ -33,6 +38,19 @@ const useChat = (roomId) => {
 
     socketRef.current.on(NEW_JOIN_EVENT, (memberInfoList) => {
       setMembers(memberInfoList);
+    });
+
+    socketRef.current.on(GAME_END_EVENT, () => {
+      // TODO: save all the game information to DB
+
+      // redirect all users to a new game page
+      socketRef.current.disconnect();
+      setGameEnd(true);
+    });
+
+    socketRef.current.on(ROOM_END_EVENT, () => {
+      socketRef.current.disconnect();
+      setRoomEnd(true);
     });
 
     return () => {
@@ -61,7 +79,7 @@ const useChat = (roomId) => {
     }
   };
 
-  return { messages, round, members, player_number, sendMessage, socketRef };
+  return { messages, round, members, player_number, gameEnd, roomEnd, sendMessage, socketRef };
 };
 
 export default useChat;

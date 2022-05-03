@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Row, Col, Card as BootstrapCard } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 
 import useChat from "../useChat";
 import Card from "../Card/Card.jsx";
@@ -8,25 +9,12 @@ import Survey from "../Survey/Survey";
 import "./Room.css";
 
 
-// const timeout = (delay) => {
-//   return new Promise( res => setTimeout(res, delay) );
-// };
-
-// let prevRound = 1;
 const Room = (props) => {
   
   const { roomId } = props.match.params;
   const [ prevRound, setPrevRound ] = useState(1);
-  const { messages, round, members, player_number, sendMessage } = useChat(roomId);
+  const { messages, round, members, player_number, gameEnd, roomEnd, sendMessage } = useChat(roomId);
   const cards = [{ "name": "Card 1" }, { "name": "Card 2" }, { "name": "Card 3" }];
-  // if(prevRound != round) {
-  //   console.log(round);
-  //   prevRound = round;
-  //   flag = true;
-  //   // return (<Redirect to="/" />);
-  // } else {
-  //   flag = false;
-  // }
 
   const handleSendMessage = (cardName) => {
       sendMessage(cardName + " was shared", round);
@@ -37,6 +25,15 @@ const Room = (props) => {
     setTimeout(() => {} , 1000);
     return <Survey setPrevRound={setPrevRound} round = {round}/>
   };
+
+  if(roomEnd) {
+    console.log('roomEnd');
+    window.location.replace("http://localhost:3000/thanks");
+  }
+
+  if(gameEnd) {
+    window.location.reload();
+  }
 
   return (
     <div>
