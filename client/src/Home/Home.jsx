@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 import "./Home.css";
 
@@ -18,9 +19,9 @@ const Home = () => {
         onChange={handleRoomNameChange}
         className="text-input-field"
       />
-      <a href={`/room/${roomName}`} className="enter-room-button">
+      <Link to={`/demographic/${roomName}`}  className="enter-room-button">
         Join room
-      </a>
+      </Link>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css";
 import Home from "./Home/Home";
 import Room from "./Room/Room";
+import Demographic from "./Demographic/Demographic";
 import EndPage from "./EndPage/EndPage";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route exact path="/room/:roomId" component={Room} />
         <Route exact path="/thanks" component={EndPage} />
+        <Route exact path="/demographic/:roomId" component={Demographic} />
       </Switch>
     </Router>
   );
