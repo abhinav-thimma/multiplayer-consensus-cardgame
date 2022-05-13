@@ -10,7 +10,7 @@ const ROOM_END_EVENT = "roomEnd";
 
 const SOCKET_SERVER_URL = "http://localhost:4000";
 
-const useChat = (roomId) => {
+const useChat = (roomId, playerNumber) => {
   const [ messages, setMessages ] = useState([]);
   const [ round, setRound ] = useState(1);
   const [ members, setMembers ] = useState([]);
@@ -21,7 +21,7 @@ const useChat = (roomId) => {
 
   useEffect(() => {
     socketRef.current = socketIOClient(SOCKET_SERVER_URL, {
-      query: { roomId },
+      query: { roomId, playerNumber },
     });
 
     socketRef.current.on(NEW_CARD_MESSAGE_EVENT, (message) => {

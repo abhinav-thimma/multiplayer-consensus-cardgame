@@ -11,9 +11,9 @@ import "./Room.css";
 
 const Room = (props) => {
   
-  const { roomId } = props.match.params;
+  const { roomId, playerNumber } = props.match.params;
   const [ prevRound, setPrevRound ] = useState(1);
-  const { messages, round, members, player_number, gameEnd, roomEnd, sendMessage } = useChat(roomId);
+  const { messages, round, members, player_number, gameEnd, roomEnd, sendMessage } = useChat(roomId, playerNumber);
   const cards = [{ "name": "Card 1" }, { "name": "Card 2" }, { "name": "Card 3" }];
 
   const handleSendMessage = (cardName) => {

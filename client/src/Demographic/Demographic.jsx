@@ -5,7 +5,7 @@ import { Form } from "react-bootstrap";
 import "./Demographic.css";
 
 const Demographic = (props) => {
-  const { roomId } = props.match.params;
+  const { roomId, playerNumber } = props.match.params;
 
   const [dob, setDob] = useState();
   const [age, setAge] = useState(0);
@@ -117,7 +117,7 @@ const Demographic = (props) => {
         </Form.Group>
         <br/>
 
-      <Link to={`/room/${roomId}`}  className="enter-room-button">
+      <Link to={`/room/${roomId}/${playerNumber}`}  className="enter-room-button">
         Join room
       </Link>
 

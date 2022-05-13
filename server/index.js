@@ -26,7 +26,7 @@ io.on("connection", (socket) => {
   console.log(`Client ${socket.id} connected`);
 
   // fetch the roomId 
-  const { roomId } = socket.handshake.query;
+  const { roomId, playerNumber } = socket.handshake.query;
 
   // if no games were played for the current room, initialize the game_count_per_room_map
   if (!game_count_per_room_map.has(roomId)) {
@@ -37,13 +37,13 @@ io.on("connection", (socket) => {
   // if this is a new room set the client_room_map for the room to []
   if(!client_room_map.has(roomId)) {
     socket.join(roomId);
-    const player_number = Math.floor(Math.random() * 1000);
+    const player_number = playerNumber;
     client_room_map.set(roomId, [{ "socketid": socket.id, "number": player_number }]);
 
   } else if(client_room_map.get(roomId).length < PLAYER_LIMIT_PER_ROOM) {
 
     socket.join(roomId);
-    const player_number = Math.floor(Math.random() * 1000);
+    const player_number = playerNumber;
     client_room_map.set(roomId, [...client_room_map.get(roomId), { "socketid": socket.id, "number": player_number }]);
     io.in(roomId).emit(NEW_JOIN_EVENT, client_room_map.get(roomId));
 
