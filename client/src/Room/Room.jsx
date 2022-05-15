@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Row, Col, Card as BootstrapCard } from 'react-bootstrap';
-import { Redirect } from 'react-router-dom';
+import CardConfig from '../CardConfig.json';
 
 import useChat from "../useChat";
 import Card from "../Card/Card.jsx";
@@ -10,28 +10,32 @@ import "./Room.css";
 
 
 const Room = (props) => {
-  
+
   const { roomId, playerNumber } = props.match.params;
-  const [ prevRound, setPrevRound ] = useState(1);
+  const [prevRound, setPrevRound] = useState(1);
   const { messages, round, members, player_number, gameEnd, roomEnd, sendMessage } = useChat(roomId, playerNumber);
-  const cards = [{ "name": "Card 1" }, { "name": "Card 2" }, { "name": "Card 3" }];
+  const cards = CardConfig.cards;
 
   const handleSendMessage = (cardName) => {
-      sendMessage(cardName + " was shared", round);
+    sendMessage(cardName + " was shared", round);
   };
 
   const goToSurveyPage = () => {
     console.log(messages);
-    setTimeout(() => {} , 1000);
-    return <Survey setPrevRound={setPrevRound} round = {round}/>
+    const message = messages[messages.length - 1].body.substring(0, 6);
+    return (
+      <div className="popup-box">
+        <Survey setPrevRound={setPrevRound} round={round} cardMessage={message} />
+      </div>
+    );
   };
 
-  if(roomEnd) {
+  if (roomEnd) {
     console.log('roomEnd');
     window.location.replace("http://localhost:3000/thanks");
   }
 
-  if(gameEnd) {
+  if (gameEnd) {
     window.location.reload();
   }
 
@@ -47,7 +51,7 @@ const Room = (props) => {
         <Col>
           <Row><h3 className="title">Members:</h3></Row>
           <Row>
-            <BootstrapCard  style={{ width: '300px', zIndex: -1}}>
+            <BootstrapCard style={{ width: '300px', zIndex: -1 }}>
               <ul>
                 {members.map((member, i) => (
                   <li>{'Player' + member['number']}</li>
@@ -62,19 +66,19 @@ const Room = (props) => {
         <div className="messages-container">
           <ol className="messages-list">
             {messages && messages.map((message, i) => (
-              <Card key={i} owner={message.ownedByCurrentUser} body = {message.body}/>
+              <Card key={i} owner={message.ownedByCurrentUser} body={message.body} />
             ))}
           </ol>
         </div>
         <div className="user-card-view">
           <div className="curr-round-card-holder">
-          <ul className="hor-messages-list">
-            {messages.slice(Math.max(messages.length - 4, 0)).map((message, i) => (
-              <div>
-                <Card key={i} owner={message.ownedByCurrentUser} body = {message.body}/>
-              </div>
-            ))}
-          </ul>
+            <ul className="hor-messages-list">
+              {messages.slice(Math.max(messages.length - 4, 0)).map((message, i) => (
+                <div>
+                  <Card key={i} owner={message.ownedByCurrentUser} body={message.body} />
+                </div>
+              ))}
+            </ul>
           </div>
           <div className="card-container">
             <h2>My Cards</h2>
