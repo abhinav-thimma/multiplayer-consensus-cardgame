@@ -56,7 +56,7 @@ const useChat = (roomId, playerNumber) => {
     return () => {
       // socketRef.current.disconnect();
     };
-  }, [ roomId, socketRef ]);
+  }, [ roomId, socketRef, playerNumber ]);
 
   let player_number = "Unknown";
   for (var i = 0, l = members.length; i < l; i++) {

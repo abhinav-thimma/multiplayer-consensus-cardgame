@@ -8,6 +8,7 @@ import Survey from "../Survey/Survey";
 
 import "./Room.css";
 
+const PLAYER_LIMIT_PER_ROOM = 4;
 
 const Room = (props) => {
   const queryParams = new URLSearchParams(window.location.search)
@@ -19,6 +20,26 @@ const Room = (props) => {
   const cards = CardConfig.cards;
 
   const handleSendMessage = (cardName) => {
+    let request = {
+      "roomid": roomId,
+      "game_num": gameNum,
+      "round_num": round,
+      "player_num": "Player " + playerNumber,
+      "card_selected": cardName
+    };
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request),
+    };
+    
+    fetch('http://127.0.0.1:5000/moves', options)
+      .then(response => response.json())
+      .then(data => console.log(data));
+
     sendMessage(cardName + " was shared", round);
   };
 
@@ -75,7 +96,7 @@ const Room = (props) => {
         <div className="user-card-view">
           <div className="curr-round-card-holder">
             <ul className="hor-messages-list">
-              {messages.slice(Math.max(messages.length - 4, 0)).map((message, i) => (
+              {messages.slice(Math.max(messages.length - PLAYER_LIMIT_PER_ROOM, 0)).map((message, i) => (
                 <div>
                   <Card key={i} owner={message.ownedByCurrentUser} body={message.body} />
                 </div>
