@@ -78,7 +78,7 @@ const Demographic = (props) => {
         .then(data => console.log(data));
 
       console.log(request);
-      history.push(`/room/${roomId}/${playerNumber}`);
+      history.push(`/room/${roomId}/${playerNumber}?game=1`);
     }
 
     setValidated(true);

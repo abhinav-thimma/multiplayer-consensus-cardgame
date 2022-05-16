@@ -10,6 +10,8 @@ import "./Room.css";
 
 
 const Room = (props) => {
+  const queryParams = new URLSearchParams(window.location.search)
+  const gameNum = queryParams.get("game")
 
   const { roomId, playerNumber } = props.match.params;
   const [prevRound, setPrevRound] = useState(1);
@@ -25,7 +27,7 @@ const Room = (props) => {
     const message = messages[messages.length - 1].body.substring(0, 6);
     return (
       <div className="popup-box">
-        <Survey setPrevRound={setPrevRound} round={round} cardMessage={message} />
+        <Survey setPrevRound={setPrevRound} round={round} cardMessage={message} roomId={roomId} playerNumber={playerNumber} gameNum = {gameNum}/>
       </div>
     );
   };
@@ -36,7 +38,7 @@ const Room = (props) => {
   }
 
   if (gameEnd) {
-    window.location.reload();
+    window.location.replace(window.location.href.replace("?game=1", "?game=2"));
   }
 
   return (
