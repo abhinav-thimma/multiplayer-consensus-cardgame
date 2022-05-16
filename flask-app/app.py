@@ -9,8 +9,8 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 HOST = '127.0.0.1'
-USER = 'root'
-PASSWORD = ''
+USER = 'actionlabstudy_consensus_admin'
+PASSWORD = 'Consensus123'
 DB = 'actionlabstudy_consensus'
 
 db_connection = mysql.connect(host=HOST, database=DB, user=USER, password=PASSWORD)
