@@ -6,7 +6,7 @@ import CardConfig from '../CardConfig.json';
 import "./Survey.css";
 
 const Survey = (props) => {
-  let { setPrevRound, round, cardMessage, roomId, playerNumber, gameNum } = props
+  let { setPrevroundAndResetTimer, round, cardMessage, roomId, playerNumber, gameNum } = props
   const [show, setShow] = useState(false);
   const [ q1, setQ1 ] = React.useState(0);
   const [ q2, setQ2 ] = React.useState(0);
@@ -42,7 +42,7 @@ const Survey = (props) => {
 
     console.log(request);
 
-    setPrevRound(round);
+    setPrevroundAndResetTimer(round);
   };
 
   if (!show) return null;

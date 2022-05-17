@@ -65,12 +65,13 @@ class DBUtil:
             round_num = request_json['round_num']
             player_num = request_json['player_num']
             card_selected = request_json['card_selected']
+            time_spent = request_json['time_spent']
             ts = time.time()
             timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
             query = f'''
-                INSERT INTO player_moves (roomid, game_num, round_num, player_num, card_selected, timestamp)
-                    VALUES ("{roomid}", {game_num}, {round_num}, "{player_num}", "{card_selected}", "{timestamp}") '''
+                INSERT INTO player_moves (roomid, game_num, round_num, player_num, card_selected, timestamp, time_spent)
+                    VALUES ("{roomid}", {game_num}, {round_num}, "{player_num}", "{card_selected}", "{timestamp}", "{time_spent}") '''
 
             cursor = self.db_connection.cursor()
             cursor.execute(query)

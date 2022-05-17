@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Card as BootstrapCard } from 'react-bootstrap';
+import Countdown, { zeroPad } from "react-countdown";
+
 import CardConfig from '../CardConfig.json';
 
 import useChat from "../useChat";
@@ -10,6 +12,14 @@ import Survey from "../Survey/Survey";
 import "./Room.css";
 
 const PLAYER_LIMIT_PER_ROOM = 4;
+const COUNTDOWN_DURATION = 60000; // milliseconds
+const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
+  return (
+    <span>
+      {zeroPad(minutes)}:{zeroPad(seconds)}
+    </span>
+  );
+};
 
 const Room = (props) => {
   let history = useHistory();
@@ -18,17 +28,31 @@ const Room = (props) => {
   const gameNum = gameText.match(/\d/)[0];
 
   const { roomId, playerNumber } = props.match.params;
-  const [prevRound, setPrevRound] = useState(1);
+  const [ prevRound, setPrevRound ] = useState(1);
+  const [ countdownDuration, setCountdownDuration ] = useState(Date.now() + COUNTDOWN_DURATION);
+
   const { messages, round, members, player_number, gameEnd, roomEnd, sendMessage } = useChat(roomId, playerNumber);
   const cards = CardConfig.cards;
 
+  const handleCountdownEnd = () => {
+    console.log('Sending default message');
+    handleSendMessage(cards[0].name);
+  };
+
+  const setPrevroundAndResetTimer = (round) =>  { 
+    setCountdownDuration(Date.now() + COUNTDOWN_DURATION);
+    setPrevRound(round);
+  }
+
   const handleSendMessage = (cardName) => {
+    const timeSpent = parseInt((COUNTDOWN_DURATION - countdownDuration + Date.now()) / 1000);
     let request = {
       "roomid": roomId,
       "game_num": gameNum,
       "round_num": round,
       "player_num": "Player " + playerNumber,
-      "card_selected": cardName
+      "card_selected": cardName,
+      "time_spent": timeSpent
     };
 
     const options = {
@@ -51,19 +75,20 @@ const Room = (props) => {
     const message = messages[messages.length - 1].body.substring(0, 6);
     return (
       <div className="popup-box">
-        <Survey setPrevRound={setPrevRound} round={round} cardMessage={message} roomId={roomId} playerNumber={playerNumber} gameNum = {gameNum}/>
+        <Survey setPrevroundAndResetTimer={setPrevroundAndResetTimer} round={round} cardMessage={message} roomId={roomId} playerNumber={playerNumber} gameNum = {gameNum}/>
       </div>
     );
   };
 
-  const message = messages[messages.length - 1].body.substring(0, 6);
   if (roomEnd) {
     console.log('roomEnd');
+    const message = messages[messages.length - 1].body.substring(0, 6);
     history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: true});
   }
 
   if (gameEnd) {
     console.log('gameEnd');
+    const message = messages[messages.length - 1].body.substring(0, 6);
     history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: false});
   }
 
@@ -74,6 +99,11 @@ const Room = (props) => {
           <h2 className="title">Room: {roomId}</h2>
           <h2 className="title">Round: {round}</h2>
           <h2 className="title">Player: {player_number}</h2>
+          <div>
+            <h2 className="title">Time: 
+            <Countdown date={countdownDuration} key={countdownDuration} renderer={countdownRenderer} onComplete={handleCountdownEnd}/>
+            </h2>
+          </div>
           {prevRound !== round && goToSurveyPage()}
         </Col>
         <Col>
