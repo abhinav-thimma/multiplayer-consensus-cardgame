@@ -7,6 +7,7 @@ import Home from "./Home/Home";
 import Room from "./Room/Room";
 import Demographic from "./Demographic/Demographic";
 import EndPage from "./EndPage/EndPage";
+import SurveyPage from "./SurveyPage/SurveyPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route exact path="/room/:roomId/:playerNumber" component={Room} />
         <Route exact path="/thanks" component={EndPage} />
         <Route exact path="/demographic/:roomId/:playerNumber" component={Demographic} />
+        <Route exact path="/surveypage/:roomId/:playerNumber" component={SurveyPage} />
       </Switch>
     </Router>
   );

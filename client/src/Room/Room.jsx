@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Row, Col, Card as BootstrapCard } from 'react-bootstrap';
 import CardConfig from '../CardConfig.json';
 
@@ -11,8 +12,10 @@ import "./Room.css";
 const PLAYER_LIMIT_PER_ROOM = 4;
 
 const Room = (props) => {
-  const queryParams = new URLSearchParams(window.location.search)
-  const gameNum = queryParams.get("game")
+  let history = useHistory();
+
+  let gameText = window.location.href.match(/game=\d/)[0];
+  const gameNum = gameText.match(/\d/)[0];
 
   const { roomId, playerNumber } = props.match.params;
   const [prevRound, setPrevRound] = useState(1);
@@ -53,13 +56,15 @@ const Room = (props) => {
     );
   };
 
+  const message = messages[messages.length - 1].body.substring(0, 6);
   if (roomEnd) {
     console.log('roomEnd');
-    window.location.replace("http://localhost:3000/thanks");
+    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: true});
   }
 
   if (gameEnd) {
-    window.location.replace(window.location.href.replace("?game=1", "?game=2"));
+    console.log('gameEnd');
+    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: false});
   }
 
   return (

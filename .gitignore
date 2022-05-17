@@ -30,5 +30,7 @@ yarn-error.log*
 /client/node_modules
 /client/package-lock.json
 /client/yarn.lock
+/client/build/*
+/client/build.zip
 
 /flask-app/__pycache__/*
