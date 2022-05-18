@@ -21,8 +21,8 @@ class DBUtil:
             timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
             query = f'''
-                INSERT INTO demographic_info (roomid, player_num, dob, age, gender, native_eng, first_lan, eng_acq_age, ethnicity, timestamp)
-                    VALUES ("{roomid}", "{player_num}", "{dob}", {age}, "{gender}", {native_eng}, "{first_lan}", {eng_acq_age}, "{ethnicity}", "{timestamp}") '''
+                INSERT INTO demographic_info (roomid, player_num, dob, age, gender, native_eng, first_lan, eng_acq_age, ethnicity, timestamp, unix_timestamp)
+                    VALUES ("{roomid}", "{player_num}", "{dob}", {age}, "{gender}", {native_eng}, "{first_lan}", {eng_acq_age}, "{ethnicity}", "{timestamp}", "{ts}") '''
 
             cursor = self.db_connection.cursor()
             cursor.execute(query)
@@ -46,8 +46,8 @@ class DBUtil:
 
 
             query = f'''
-                INSERT INTO survey_responses (roomid, game_num, round_num, player_num, q1_res, q2_res, timestamp)
-                    VALUES ("{roomid}", {game_num}, {round_num}, "{player_num}", "{q1_res}", "{q2_res}", "{timestamp}") '''
+                INSERT INTO survey_responses (roomid, game_num, round_num, player_num, q1_res, q2_res, timestamp, unix_timestamp)
+                    VALUES ("{roomid}", {game_num}, {round_num}, "{player_num}", "{q1_res}", "{q2_res}", "{timestamp}", "{ts}") '''
 
             cursor = self.db_connection.cursor()
             cursor.execute(query)
@@ -70,8 +70,8 @@ class DBUtil:
             timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
             query = f'''
-                INSERT INTO player_moves (roomid, game_num, round_num, player_num, card_selected, timestamp, time_spent)
-                    VALUES ("{roomid}", {game_num}, {round_num}, "{player_num}", "{card_selected}", "{timestamp}", "{time_spent}") '''
+                INSERT INTO player_moves (roomid, game_num, round_num, player_num, card_selected, timestamp, time_spent, unix_timestamp)
+                    VALUES ("{roomid}", {game_num}, {round_num}, "{player_num}", "{card_selected}", "{timestamp}", "{time_spent}", "{ts}") '''
 
             cursor = self.db_connection.cursor()
             cursor.execute(query)

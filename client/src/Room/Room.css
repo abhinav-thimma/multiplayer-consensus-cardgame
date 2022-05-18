@@ -110,3 +110,11 @@
 .card-container {
     margin-left: 5%;
 }
+
+.member-lobby {
+    /* left: 50%; */
+    margin: 0 auto;
+    padding-top: 10%;
+    width: 30%;
+    /* width: 500px; */
+}

@@ -71,7 +71,7 @@ io.on("connection", (socket) => {
         io.in(roomId).emit(GAME_END_EVENT);
       }
 
-    } else if(total_messages_map.get(roomId) % 4 === 0) {  
+    } else if(total_messages_map.get(roomId) % PLAYER_LIMIT_PER_ROOM === 0) {  
       // send a ROUND_MESSAGE_EVENT channel in roomId
       io.in(roomId).emit(ROUND_MESSAGE_EVENT, total_messages_map.get(roomId)/PLAYER_LIMIT_PER_ROOM + 1);
     }

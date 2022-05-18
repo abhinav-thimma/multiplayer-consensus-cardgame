@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Card as BootstrapCard } from 'react-bootstrap';
-import Countdown, { zeroPad } from "react-countdown";
+import Countdown, { zeroPad, CountdownApi } from "react-countdown";
 
 import CardConfig from '../CardConfig.json';
 
@@ -28,11 +28,19 @@ const Room = (props) => {
   const gameNum = gameText.match(/\d/)[0];
 
   const { roomId, playerNumber } = props.match.params;
-  const [ prevRound, setPrevRound ] = useState(1);
-  const [ countdownDuration, setCountdownDuration ] = useState(Date.now() + COUNTDOWN_DURATION);
-
   const { messages, round, members, player_number, gameEnd, roomEnd, sendMessage } = useChat(roomId, playerNumber);
   const cards = CardConfig.cards;
+
+  const [ prevRound, setPrevRound ] = useState(1);
+  const [ countdownDuration, setCountdownDuration ] = useState(Date.now() + COUNTDOWN_DURATION);
+  const [ resetCountdown, setResetCountdown ] = useState(false);
+  
+  let countdownApi = null;
+  const setCountdownRef = (countdown) => {
+    if (countdown) {
+      countdownApi = countdown.getApi();
+    }
+  };
 
   const handleCountdownEnd = () => {
     console.log('Sending default message');
@@ -45,6 +53,9 @@ const Room = (props) => {
   }
 
   const handleSendMessage = (cardName) => {
+    if(countdownApi) {
+      countdownApi.pause();
+    }
     const timeSpent = parseInt((COUNTDOWN_DURATION - countdownDuration + Date.now()) / 1000);
     let request = {
       "roomid": roomId,
@@ -92,25 +103,16 @@ const Room = (props) => {
     history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: false});
   }
 
-  return (
-    <div>
-      <Row>
-        <Col>
-          <h2 className="title">Room: {roomId}</h2>
-          <h2 className="title">Round: {round}</h2>
-          <h2 className="title">Player: {player_number}</h2>
-          <div>
-            <h2 className="title">Time: 
-            <Countdown date={countdownDuration} key={countdownDuration} renderer={countdownRenderer} onComplete={handleCountdownEnd}/>
-            </h2>
-          </div>
-          {prevRound !== round && goToSurveyPage()}
-        </Col>
-        <Col>
+  let renderContent = (<div></div>);
+  if (members.length < PLAYER_LIMIT_PER_ROOM) {
+    renderContent = (
+      <div className="member-lobby">
+        <h2>Waiting for more players...</h2>
+        <Col >
           <Row><h3 className="title">Members:</h3></Row>
           <Row>
-            <BootstrapCard style={{ width: '300px', zIndex: -1 }}>
-              <ul>
+            <BootstrapCard style={{ width: '400px', zIndex: -1 }}>
+              <ul style={{padding: '10px'}}>
                 {members.map((member, i) => (
                   <li>{'Player' + member['number']}</li>
                 ))}
@@ -118,41 +120,77 @@ const Room = (props) => {
             </BootstrapCard>
           </Row>
         </Col>
-      </Row>
-
-      <div className="chat-room-container">
-        <div className="messages-container">
-          <ol className="messages-list">
-            {messages && messages.map((message, i) => (
-              <Card key={i} owner={message.ownedByCurrentUser} body={message.body} />
-            ))}
-          </ol>
-        </div>
-        <div className="user-card-view">
-          <div className="curr-round-card-holder">
-            <ul className="hor-messages-list">
-              {messages.slice(Math.max(messages.length - PLAYER_LIMIT_PER_ROOM, 0)).map((message, i) => (
-                <div>
-                  <Card key={i} owner={message.ownedByCurrentUser} body={message.body} />
-                </div>
-              ))}
-            </ul>
-          </div>
-          <div className="card-container">
-            <h2>My Cards</h2>
-            {
-              cards.map((card) => (
-                <button onClick={() => handleSendMessage(card.name)} className="send-message-button">
-                  {card.name}
-                </button>
-              ))
-            }
-          </div>
-        </div>
-
       </div>
-    </div>
-  );
+    );
+  } else {
+
+    if(resetCountdown === false) {
+      setCountdownDuration(Date.now() + COUNTDOWN_DURATION);
+      setResetCountdown(true);
+    }
+    renderContent = (
+      <div>
+        <Row>
+          <Col>
+            <h2 className="title">Room: {roomId}</h2>
+            <h2 className="title">Round: {round}</h2>
+            <h2 className="title">Player: {player_number}</h2>
+            <div>
+              <h2 className="title">Time:
+                <Countdown ref={setCountdownRef} date={countdownDuration} key={countdownDuration} renderer={countdownRenderer} onComplete={handleCountdownEnd} />
+              </h2>
+            </div>
+            {prevRound !== round && goToSurveyPage()}
+          </Col>
+          <Col>
+            <Row><h3 className="title">Members:</h3></Row>
+            <Row>
+              <BootstrapCard style={{ width: '300px', zIndex: -1 }}>
+                <ul>
+                  {members.map((member, i) => (
+                    <li>{'Player' + member['number']}</li>
+                  ))}
+                </ul>
+              </BootstrapCard>
+            </Row>
+          </Col>
+        </Row>
+
+        <div className="chat-room-container">
+          <div className="messages-container">
+            <ol className="messages-list">
+              {messages && messages.map((message, i) => (
+                <Card key={i} owner={message.ownedByCurrentUser} body={message.body} />
+              ))}
+            </ol>
+          </div>
+          <div className="user-card-view">
+            <div className="curr-round-card-holder">
+              <ul className="hor-messages-list">
+                {messages.slice(Math.max(messages.length - PLAYER_LIMIT_PER_ROOM, 0)).map((message, i) => (
+                  <div>
+                    <Card key={i} owner={message.ownedByCurrentUser} body={message.body} />
+                  </div>
+                ))}
+              </ul>
+            </div>
+            <div className="card-container">
+              <h2>My Cards</h2>
+              {
+                cards.map((card) => (
+                  <button onClick={() => handleSendMessage(card.name)} className="send-message-button">
+                    {card.name}
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return renderContent;
 };
 
 export default Room;
