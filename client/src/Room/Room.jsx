@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Card as BootstrapCard } from 'react-bootstrap';
 import Countdown, { zeroPad, CountdownApi } from "react-countdown";
@@ -11,7 +11,13 @@ import Survey from "../Survey/Survey";
 
 import "./Room.css";
 
-const PLAYER_LIMIT_PER_ROOM = 4;
+
+const DEFAULT_CONFIG = {
+  PLAYER_LIMIT_PER_ROOM: 4,
+  ROUND_LIMIT: 2,
+  GAME_LIMIT: 1,
+  COUNTDOWN_DURATION: 60000
+};
 const COUNTDOWN_DURATION = 60000; // milliseconds
 const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
   return (
@@ -31,9 +37,31 @@ const Room = (props) => {
   const { messages, round, members, player_number, gameEnd, roomEnd, sendMessage } = useChat(roomId, playerNumber);
   const cards = CardConfig.cards;
 
+  const [ CONFIG_MAP, setConfigMap ] = useState(null);
+  let configMap = CONFIG_MAP ? CONFIG_MAP: DEFAULT_CONFIG;
   const [ prevRound, setPrevRound ] = useState(1);
   const [ countdownDuration, setCountdownDuration ] = useState(Date.now() + COUNTDOWN_DURATION);
   const [ resetCountdown, setResetCountdown ] = useState(false);
+
+  useEffect(() => {
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    };
+    console.log(`config map: ${CONFIG_MAP}`)
+    if (CONFIG_MAP == null) {
+      fetch(`http://127.0.0.1:5000/roomConfig?roomId=${roomId}`, options)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          return data;
+        })
+        .then(data => setConfigMap(data));
+    }
+  }, [roomId])
+
   
   let countdownApi = null;
   const setCountdownRef = (countdown) => {
@@ -104,7 +132,7 @@ const Room = (props) => {
   }
 
   let renderContent = (<div></div>);
-  if (members.length < PLAYER_LIMIT_PER_ROOM) {
+  if (members.length < configMap.PLAYER_LIMIT_PER_ROOM) {
     renderContent = (
       <div className="member-lobby">
         <h2>Waiting for more players...</h2>
@@ -135,6 +163,7 @@ const Room = (props) => {
             <h2 className="title">Room: {roomId}</h2>
             <h2 className="title">Round: {round}</h2>
             <h2 className="title">Player: {player_number}</h2>
+            <h2 className="title">Game: {gameNum}</h2>
             <div>
               <h2 className="title">Time:
                 <Countdown ref={setCountdownRef} date={countdownDuration} key={countdownDuration} renderer={countdownRenderer} onComplete={handleCountdownEnd} />
@@ -167,7 +196,7 @@ const Room = (props) => {
           <div className="user-card-view">
             <div className="curr-round-card-holder">
               <ul className="hor-messages-list">
-                {messages.slice(Math.max(messages.length - PLAYER_LIMIT_PER_ROOM, 0)).map((message, i) => (
+                {messages.slice(Math.max(messages.length - configMap.PLAYER_LIMIT_PER_ROOM, 0)).map((message, i) => (
                   <div>
                     <Card key={i} owner={message.ownedByCurrentUser} body={message.body} />
                   </div>
