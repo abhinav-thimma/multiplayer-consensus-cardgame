@@ -95,31 +95,3 @@ class DBUtil:
             print(e)
             return False
     
-    def get_room_config(self, room_id):
-        db_connection = mysql.connect(host=self.host, database=self.database, user=self.user, password=self.password)
-
-        try:
-            query = f'''
-                SELECT player_limit, game_limit, round_limit, round_time_limit FROM room WHERE room_id = "{room_id}" '''
-
-            cursor = db_connection.cursor()
-            cursor.execute(query)
-            result = cursor.fetchone()
-            cursor.close()
-
-            response = {'PLAYER_LIMIT_PER_ROOM': result[0],
-                        'GAME_LIMIT': result[1],
-                        'ROUND_LIMIT': result[2],
-                        'COUNTDOWN_DURATION': result[3]}
-            db_connection.close()
-            return response
-        except Exception as e:
-            print(e)
-            
-            DEFAULT_RESPONSE = response = {'PLAYER_LIMIT_PER_ROOM': 4,
-                        'GAME_LIMIT': 2,
-                        'ROUND_LIMIT': 2,
-                        'COUNTDOWN_DURATION': 60000}
-            return DEFAULT_RESPONSE
-
-
