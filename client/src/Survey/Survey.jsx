@@ -6,7 +6,7 @@ import CardConfig from '../CardConfig.json';
 import "./Survey.css";
 
 const Survey = (props) => {
-  let { setPrevroundAndResetTimer, round, cardMessage, roomId, playerNumber, gameNum } = props
+  let { setPrevroundAndResetTimer, round, cardMessage, roomId, playerNumber, gameNum, feedbackQuestions } = props
   const [show, setShow] = useState(false);
   const [ q1, setQ1 ] = React.useState(0);
   const [ q2, setQ2 ] = React.useState(0);
@@ -55,14 +55,14 @@ const Survey = (props) => {
         </Row>
         <Form.Label>Please enter your opinion about the card above</Form.Label>
         <Form.Group className="mb-3" controlId="q1">
-          <Form.Label>How novel was the information provided by this card?</Form.Label><br/>
+          <Form.Label>{feedbackQuestions[0]}</Form.Label><br/>
           <RangeSlider
             value={q1}
             onChange={e => setQ1(e.target.value)}
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="q2">
-          <Form.Label>How useful was the information provided by this card?</Form.Label><br/>
+          <Form.Label>{feedbackQuestions[1]}</Form.Label><br/>
           <RangeSlider
             value={q2}
             onChange={e => setQ2(e.target.value)}

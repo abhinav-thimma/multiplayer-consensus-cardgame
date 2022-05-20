@@ -34,6 +34,7 @@ const Room = (props) => {
   const { roomId, playerNumber } = props.match.params;
   const { messages, round, members, player_number, gameEnd, roomEnd, sendMessage } = useChat(roomId, playerNumber);
   const [ cards, setCards ] = useState([]);
+  const [ feedbackQuestions, setFeedbackQuestions ] = useState([]);
 
   const [ CONFIG_MAP, setConfigMap ] = useState(null);
   let configMap = CONFIG_MAP ? CONFIG_MAP: DEFAULT_CONFIG;
@@ -60,6 +61,7 @@ const Room = (props) => {
           .then(data => {
             setConfigMap(data.config);
             setCards(data.cards);
+            setFeedbackQuestions(data.feedback_questions);
           });
       }
     }
@@ -117,7 +119,7 @@ const Room = (props) => {
     const message = messages[messages.length - 1].body.substring(0, 6);
     return (
       <div className="popup-box">
-        <Survey setPrevroundAndResetTimer={setPrevroundAndResetTimer} round={round} cardMessage={message} roomId={roomId} playerNumber={playerNumber} gameNum = {gameNum}/>
+        <Survey setPrevroundAndResetTimer={setPrevroundAndResetTimer} round={round} cardMessage={message} roomId={roomId} playerNumber={playerNumber} gameNum = {gameNum} feedbackQuestions={feedbackQuestions}/>
       </div>
     );
   };
@@ -125,13 +127,13 @@ const Room = (props) => {
   if (roomEnd) {
     console.log('roomEnd');
     const message = messages[messages.length - 1].body.substring(0, 6);
-    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: true});
+    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: true, "feedbackQuestions": feedbackQuestions});
   }
 
   if (gameEnd) {
     console.log('gameEnd');
     const message = messages[messages.length - 1].body.substring(0, 6);
-    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: false});
+    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: false, "feedbackQuestions": feedbackQuestions});
   }
 
   let renderContent = (<div></div>);
