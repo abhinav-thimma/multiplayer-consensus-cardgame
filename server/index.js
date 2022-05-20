@@ -82,7 +82,19 @@ function updateConfigMap(roomId) {
   }
 }
 
+function getFeedbackQuestions(roomId, gameIdx) {
+  let feedback_questions = [];
 
+  for (let i = 0; i < ROOM_CARD_CONFIG.rooms.length; i++) {
+    let current_room_id = ROOM_CARD_CONFIG.rooms[i].roomid;
+    if (current_room_id === roomId) {
+      let current_game = ROOM_CARD_CONFIG.rooms[i].games[gameIdx];
+      feedback_questions = current_game.feedback_questions;
+      break;
+    }
+  }
+  return feedback_questions;
+}
 
 /*_______________________________________EXPRESS: START______________________________________________*/
 // creating and handling API requests on express server
@@ -112,7 +124,10 @@ app.get('/getconfig', (req, res) => {
 
   let playerCards = assignCardsForPlayer(game_idx, roomId, player_idx);
   updateConfigMap(roomId);
-  res.send({"cards": playerCards, "config": CONFIG_MAP.get(roomId)});
+
+  let feedback_questions = getFeedbackQuestions(roomId, game_idx);
+
+  res.send({"cards": playerCards, "config": CONFIG_MAP.get(roomId), "feedback_questions": feedback_questions});
 });
 
 // starting Express server
@@ -128,7 +143,6 @@ io.on("connection", (socket) => {
   const { roomId, playerNumber } = socket.handshake.query;
   if(!CONFIG_MAP.has(roomId)) {
     updateConfigMap(roomId);
-    console.log(CONFIG_MAP);
   }
 
   // if no games were played for the current room, initialize the game_count_per_room_map
