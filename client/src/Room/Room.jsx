@@ -3,8 +3,6 @@ import { useHistory } from "react-router-dom";
 import { Row, Col, Card as BootstrapCard } from 'react-bootstrap';
 import Countdown, { zeroPad, CountdownApi } from "react-countdown";
 
-import CardConfig from '../CardConfig.json';
-
 import useChat from "../useChat";
 import Card from "../Card/Card.jsx";
 import Survey from "../Survey/Survey";
@@ -35,7 +33,7 @@ const Room = (props) => {
 
   const { roomId, playerNumber } = props.match.params;
   const { messages, round, members, player_number, gameEnd, roomEnd, sendMessage } = useChat(roomId, playerNumber);
-  const cards = CardConfig.cards;
+  const [ cards, setCards ] = useState([]);
 
   const [ CONFIG_MAP, setConfigMap ] = useState(null);
   let configMap = CONFIG_MAP ? CONFIG_MAP: DEFAULT_CONFIG;
@@ -44,23 +42,28 @@ const Room = (props) => {
   const [ resetCountdown, setResetCountdown ] = useState(false);
 
   useEffect(() => {
-    const options = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+    if(player_number !== "Unknown") {
+      const options = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      };
+      console.log(`config map: ${CONFIG_MAP}`)
+      if (CONFIG_MAP == null) {
+        fetch(`http://127.0.0.1:3500/getconfig?roomId=${roomId}&playerNum=${playerNumber}`, options)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            return data;
+          })
+          .then(data => {
+            setConfigMap(data.config);
+            setCards(data.cards);
+          });
       }
-    };
-    console.log(`config map: ${CONFIG_MAP}`)
-    if (CONFIG_MAP == null) {
-      fetch(`http://127.0.0.1:5000/roomConfig?roomId=${roomId}`, options)
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          return data;
-        })
-        .then(data => setConfigMap(data));
     }
-  }, [roomId])
+  }, [roomId, CONFIG_MAP, playerNumber, player_number]);
 
   
   let countdownApi = null;

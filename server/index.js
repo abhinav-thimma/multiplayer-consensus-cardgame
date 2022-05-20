@@ -1,4 +1,6 @@
 const server = require("http").createServer();
+const express = require("express");
+const cors = require("cors");
 const axios = require('axios');
 const io = require("socket.io")(server, {
   cors: {
@@ -6,7 +8,11 @@ const io = require("socket.io")(server, {
   },
 });
 
-const PORT = 4000;
+const SOCKETIO_PORT = 4000;
+const EXPRESS_PORT = 3500;
+
+// Reading the room card configuration file
+const ROOM_CARD_CONFIG = require("./RoomCardConfig.json");
 
 // Game config
 const CONFIG_MAP = new Map();
@@ -21,36 +27,107 @@ const ROOM_END_EVENT = "roomEnd";
 let total_messages_map = new Map(); // this map stores total messages per room
 let client_room_map = new Map();  // this map stores the socket.id and player_number for each room
 let game_count_per_room_map = new Map(); // this map stores the number of games completed per room
+let room_assignment_map = new Map(); // This map stores how many players have been assigned to each room
 
-function makeGetRequest(path) {
-  return new Promise(function (resolve, reject) {
-      axios.get(path).then(
-          (response) => {
-              var result = response.data;
-              console.log('Processing Request');
-              resolve(result);
-          },
-              (error) => {
-              reject(error);
-          }
-      );
-  });
+function asignRoomId() {
+  for(let i= 0; i< ROOM_CARD_CONFIG['rooms'].length; i++) {
+    let roomid = ROOM_CARD_CONFIG['rooms'][i]['roomid'];
+    let player_limit = ROOM_CARD_CONFIG['rooms'][i]['player_limit'];
+
+    if(!room_assignment_map.get(roomid)) {
+      room_assignment_map.set(roomid, 0);
+    }
+
+    if(room_assignment_map.get(roomid) < player_limit) {
+      room_assignment_map.set(roomid, room_assignment_map.get(roomid) + 1);
+      return roomid;
+    }
+  }
 }
 
-async function get_config(room_id) {
-  var result = await makeGetRequest(`http://127.0.0.1:5000/roomConfig?roomId=${room_id}`);
-  CONFIG_MAP.set(room_id, result);
-  return result;  
+function assignCardsForPlayer(game_idx, room_id, player_idx) {
+  let player_cards = [];
+
+  for(let i= 0; i< ROOM_CARD_CONFIG.rooms.length; i++) {
+    let current_room_id = ROOM_CARD_CONFIG.rooms[i].roomid;
+    
+    if(room_id === current_room_id) {
+      let current_game = ROOM_CARD_CONFIG.rooms[i].games[game_idx];
+      let cards = current_game.cards;
+
+      for(let j= 0; j< cards.length; j++) {
+        if(parseInt(cards[j].player) == parseInt(player_idx)) {
+          player_cards.push(cards[j]);
+        }
+      }
+    }
+  }
+  return player_cards;
 }
 
+function updateConfigMap(roomId) {
+
+  for (let i = 0; i < ROOM_CARD_CONFIG['rooms'].length; i++) {
+    let current_room_id = ROOM_CARD_CONFIG['rooms'][i]['roomid'];
+    if (current_room_id === roomId) {
+      let config = {
+        'PLAYER_LIMIT_PER_ROOM': ROOM_CARD_CONFIG['rooms'][i]['player_limit'],
+        'GAME_LIMIT': ROOM_CARD_CONFIG['rooms'][i]['game_limit'],
+        'ROUND_LIMIT': ROOM_CARD_CONFIG['rooms'][i]['round_limit'],
+        'COUNTDOWN_DURATION': 60000
+      }
+      CONFIG_MAP.set(roomId, config);
+      break;
+    }
+  }
+}
+
+
+
+/*_______________________________________EXPRESS: START______________________________________________*/
+// creating and handling API requests on express server
+const app = express();
+app.use(cors({
+  origin: '*'
+}));
+
+app.get('/assignroom', (req, res) => {
+  let roomId = asignRoomId();
+  res.send({"room": roomId});
+});
+
+app.get('/getconfig', (req, res) => {
+  let roomId = req.query.roomId;
+  let playerNum = req.query.playerNum;
+  let game_idx = game_count_per_room_map.get(roomId)? game_count_per_room_map.get(roomId) : 0;
+  let player_idx = 0;
+
+  if(client_room_map.get(roomId)) {
+    client_room_map.get(roomId).forEach((value, key) => {
+      if(value.number === playerNum) {
+        player_idx = key;
+      }
+    });
+  }
+
+  let playerCards = assignCardsForPlayer(game_idx, roomId, player_idx);
+  updateConfigMap(roomId);
+  res.send({"cards": playerCards, "config": CONFIG_MAP.get(roomId)});
+});
+
+// starting Express server
+app.listen(EXPRESS_PORT, () => console.log(`Express server listening on port: ${EXPRESS_PORT}!`))
+/*_______________________________________EXPRESS: END________________________________________________*/
+
+
+/*_______________________________________SOCKET.IO: START______________________________________________*/
 io.on("connection", (socket) => {
   console.log(`Client ${socket.id} connected`);
 
   // fetch the roomId 
   const { roomId, playerNumber } = socket.handshake.query;
   if(!CONFIG_MAP.has(roomId)) {
-    get_config(roomId);
-    setTimeout(() => console.log("timeout complete"), 2000);
+    updateConfigMap(roomId);
     console.log(CONFIG_MAP);
   }
 
@@ -64,7 +141,7 @@ io.on("connection", (socket) => {
   if(!client_room_map.has(roomId)) {
     socket.join(roomId);
     const player_number = playerNumber;
-    client_room_map.set(roomId, [{ "socketid": socket.id, "number": player_number }]);
+    client_room_map.set(roomId, [{ "socketid": socket.id, "number": player_number}]);
 
   } else if(client_room_map.get(roomId).length < CONFIG_MAP.get(roomId).PLAYER_LIMIT_PER_ROOM) {
 
@@ -111,6 +188,7 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
+server.listen(SOCKETIO_PORT, () => {
+  console.log(`Socket.io Listening on port ${SOCKETIO_PORT}`);
 });
+/*_______________________________________SOCKET.IO: END________________________________________________*/
