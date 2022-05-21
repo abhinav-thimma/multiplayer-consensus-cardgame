@@ -14,6 +14,9 @@ const SurveyPage = (props) => {
   let finalGame = props.location.state.finalGame;
   let feedbackQuestions = props.location.state.feedbackQuestions;
   let gameEndQuestions = props.location.state.gameEndQuestions;
+  let members = props.location.state.members;
+  let currentPlayer = props.location.state.currentPlayer;
+
   console.log(`game number: ${gameNum}`)
 
   const [q1, setQ1] = React.useState(0);
@@ -62,7 +65,7 @@ const SurveyPage = (props) => {
     if (!finalGame) {
       history.push(`/room/${roomId}/${playerNumber}?game=${gameNum + 1}`);
     } else {
-      history.push('/thanks');
+      history.push('/reflections', {"members": members, "currentPlayer": currentPlayer});
     }
   };
 

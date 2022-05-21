@@ -10,12 +10,14 @@ import EndPage from "./EndPage/EndPage";
 import SurveyPage from "./SurveyPage/SurveyPage";
 import AutoAssign from "./AutoAssign/AutoAssign";
 import Instructions from "./Instructions/Instructions";
+import Reflections from "./Reflections/Reflections";
 
 function App() {
   return (
     <Router>
       <Switch>
         <Route exact path="/" component={AutoAssign} />
+        <Route exact path="/reflections" component={Reflections} />
         <Route exact path="/instructions/:roomId/:playerNumber" component={Instructions} />
         <Route exact path="/home" component={Home} />
         <Route exact path="/room/:roomId/:playerNumber" component={Room} />

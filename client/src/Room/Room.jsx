@@ -130,13 +130,13 @@ const Room = (props) => {
   if (roomEnd) {
     console.log('roomEnd');
     const message = messages[messages.length - 1].body.substring(0, 6);
-    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: true, "feedbackQuestions": feedbackQuestions, "gameEndQuestions": gameEndQuestions});
+    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: true, "feedbackQuestions": feedbackQuestions, "gameEndQuestions": gameEndQuestions, "members": members, "currentPlayer": playerNumber});
   }
 
   if (gameEnd) {
     console.log('gameEnd');
     const message = messages[messages.length - 1].body.substring(0, 6);
-    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: false, "feedbackQuestions": feedbackQuestions, "gameEndQuestions": gameEndQuestions});
+    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: false, "feedbackQuestions": feedbackQuestions, "gameEndQuestions": gameEndQuestions, "members": members, "currentPlayer": playerNumber});
   }
 
   let renderContent = (<div></div>);
@@ -165,7 +165,7 @@ const Room = (props) => {
       setResetCountdown(true);
     }
     renderContent = (
-      <div>
+      <div className="header-div">
         <Row>
           <Col>
             <h2 className="title">Room: {roomId}</h2>
@@ -190,6 +190,19 @@ const Room = (props) => {
                 </ul>
               </BootstrapCard>
             </Row>
+          </Col>
+          <Col>
+            <div>
+              <p style={{ fontWeight: 'bold', textAlign: 'center', fontSize: '20px' }}>Instructions for the game</p>
+              <ul>
+                <li>You will be playing a card game where there will be multiple players and multiple games.</li>
+                <li>Each game will further be divided into multiple rounds</li>
+                <li>In each round you are required to select one of the cards which is available with you to share information to all the players in your room.</li>
+                <li>You will be allowed to play just one card per round</li>
+                <li>After all the players play their cards for a round, a Survey page would be shown asking questions about your card choice</li>
+                <li>At the end of each game there would be additional questions regarding the entire game.</li>
+              </ul>
+            </div >
           </Col>
         </Row>
 
