@@ -204,8 +204,13 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Socket.io and Express Listening on port ${PORT}`);
-});
+if (typeof(PhusionPassenger) != 'undefined') {
+  server.listen('passenger');
+} else {
+  // app.listen(3000);
+  server.listen(PORT, () => {
+    console.log(`Socket.io and Express Listening on port ${PORT}`);
+  });
+}
 
 /*_______________________________________SOCKET.IO: END________________________________________________*/
