@@ -26,7 +26,8 @@ const Survey = (props) => {
       "round_num": round,
       "player_num": "Player " + playerNumber,
       "q1_res": q1,
-      "q2_res": q2
+      "q2_res": q2,
+      "game_end": false
     };
 
     const options = {

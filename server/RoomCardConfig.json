@@ -15,7 +15,8 @@
                         {"name": "Card 1.3", "description": "Card 1.3 description", "player": 1},
                         {"name": "Card 1.4", "description": "Card 1.4 description", "player": 1}
                     ],
-                    "feedback_questions": ["Question 1.1", "Question 1.2"]
+                    "feedback_questions": ["Question 1.1", "Question 1.2"],
+                    "game_end_survey": ["Game end survey Question 1.1", "Game end survey Question 1.2"]
                 },
                 {
                     "gameid": "Game 2",
@@ -25,7 +26,8 @@
                         {"name": "Card 2.2", "description": "Card 2.2 description", "player": 1},
                         {"name": "Card 2.4", "description": "Card 2.4 description", "player": 1}
                     ],
-                    "feedback_questions": ["Question 2.1", "Question 2.2"]
+                    "feedback_questions": ["Question 2.1", "Question 2.2"],
+                    "game_end_survey": ["Game end survey Question 2.1", "Game end survey Question 2.2"]
                 }
             ]
         },
@@ -48,7 +50,8 @@
                         {"name": "Card 1.7", "description": "Card 1.7 description", "player": 3},
                         {"name": "Card 1.8", "description": "Card 1.8 description", "player": 3}
                     ],
-                    "feedback_questions": ["Question 1.1", "Question 1.2"]
+                    "feedback_questions": ["Question 1.1", "Question 1.2"],
+                    "game_end_survey": ["Game end survey Question 1.1", "Game end survey Question 1.2"]
                 },
                 {
                     "gameid": "Game 2",
@@ -62,7 +65,8 @@
                         {"name": "Card 2.7", "description": "Card 2.7 description", "player": 3},
                         {"name": "Card 2.8", "description": "Card 2.8 description", "player": 3}
                     ],
-                    "feedback_questions": ["Question 2.1", "Question 2.2"]
+                    "feedback_questions": ["Question 2.1", "Question 2.2"],
+                    "game_end_survey": ["Game end survey Question 2.1", "Game end survey Question 2.2"]
                 }
             ]
         }

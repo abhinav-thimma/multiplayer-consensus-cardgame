@@ -4,7 +4,6 @@
     right: 30%;
     top: 50%;
     width: 40%;
-    /* transform: translate(0, -50%); */
     display: flex;
     flex-direction: column;
 }
@@ -20,14 +19,20 @@
 
 .box {
     position: relative;
-    width: 70%;
+    width: 50%;
     margin: 0 auto;
     height: auto;
-    max-height: 70vh;
-    margin-top: calc(100vh - 85vh - 20px);
+    max-height: 80vh;
+    margin-top: calc(100vh - 90vh - 20px);
     background: #fff;
     border-radius: 4px;
     padding: 20px;
     border: 1px solid #999;
     overflow: auto;
+}
+
+.center-div {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
 }

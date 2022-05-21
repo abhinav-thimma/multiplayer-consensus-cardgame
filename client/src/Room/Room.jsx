@@ -36,6 +36,7 @@ const Room = (props) => {
   const { messages, round, members, player_number, gameEnd, roomEnd, sendMessage } = useChat(roomId, playerNumber);
   const [ cards, setCards ] = useState([]);
   const [ feedbackQuestions, setFeedbackQuestions ] = useState([]);
+  const [ gameEndQuestions, setGameEndQuestions ] = useState([]);
 
   const [ CONFIG_MAP, setConfigMap ] = useState(null);
   let configMap = CONFIG_MAP ? CONFIG_MAP: DEFAULT_CONFIG;
@@ -63,6 +64,7 @@ const Room = (props) => {
             setConfigMap(data.config);
             setCards(data.cards);
             setFeedbackQuestions(data.feedback_questions);
+            setGameEndQuestions(data.game_end_questions);
           });
       }
     }
@@ -128,13 +130,13 @@ const Room = (props) => {
   if (roomEnd) {
     console.log('roomEnd');
     const message = messages[messages.length - 1].body.substring(0, 6);
-    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: true, "feedbackQuestions": feedbackQuestions});
+    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: true, "feedbackQuestions": feedbackQuestions, "gameEndQuestions": gameEndQuestions});
   }
 
   if (gameEnd) {
     console.log('gameEnd');
     const message = messages[messages.length - 1].body.substring(0, 6);
-    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: false, "feedbackQuestions": feedbackQuestions});
+    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: false, "feedbackQuestions": feedbackQuestions, "gameEndQuestions": gameEndQuestions});
   }
 
   let renderContent = (<div></div>);

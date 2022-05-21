@@ -51,13 +51,14 @@ class DBUtil:
             player_num = request_json['player_num']
             q1_res = request_json['q1_res']
             q2_res = request_json['q2_res']
+            game_end = 1 if(request_json['game_end']) else 0
             ts = time.time()
             timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
 
             query = f'''
-                INSERT INTO survey_responses (roomid, game_num, round_num, player_num, q1_res, q2_res, timestamp, unix_timestamp)
-                    VALUES ("{roomid}", {game_num}, {round_num}, "{player_num}", "{q1_res}", "{q2_res}", "{timestamp}", "{ts}") '''
+                INSERT INTO survey_responses (roomid, game_num, round_num, player_num, q1_res, q2_res, timestamp, unix_timestamp, game_end)
+                    VALUES ("{roomid}", {game_num}, {round_num}, "{player_num}", "{q1_res}", "{q2_res}", "{timestamp}", "{ts}", {game_end}) '''
 
             cursor = db_connection.cursor()
             cursor.execute(query)
