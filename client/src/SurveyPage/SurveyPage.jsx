@@ -17,8 +17,8 @@ const SurveyPage = (props) => {
   let feedbackQuestions = props.location.state.feedbackQuestions;
   console.log(`game number: ${gameNum}`)
 
-  const [ q1, setQ1 ] = React.useState(0);
-  const [ q2, setQ2 ] = React.useState(0);
+  const [q1, setQ1] = React.useState(0);
+  const [q2, setQ2] = React.useState(0);
   const cards = CardConfig.cards;
 
   const handleSubmit = (event) => {
@@ -44,7 +44,7 @@ const SurveyPage = (props) => {
       .then(data => console.log(data));
 
     console.log(request);
-    if(!finalGame) {
+    if (!finalGame) {
       history.push(`/room/${roomId}/${playerNumber}?game=${gameNum + 1}`);
     } else {
       history.push('/thanks');
@@ -59,18 +59,30 @@ const SurveyPage = (props) => {
         </Row>
         <Form.Label>Please enter your opinion about the card above</Form.Label>
         <Form.Group className="mb-3" controlId="q1">
-          <Form.Label>{feedbackQuestions[0]}</Form.Label><br/>
-          <RangeSlider
-            value={q1}
-            onChange={e => setQ1(e.target.value)}
-          />
+          <Form.Label>{feedbackQuestions[0]}</Form.Label><br />
+          <span style={{ display: "inline-block" }}>
+            <span style={{ display: "inline-block" }}>0</span>
+            <span style={{ display: "inline-block", margin: "10px" }}>
+              <RangeSlider
+                value={q1}
+                onChange={e => setQ1(e.target.value)}
+              />
+            </span>
+            <span style={{ display: "inline-block" }}>100</span>
+          </span>
         </Form.Group>
         <Form.Group className="mb-3" controlId="q2">
-          <Form.Label>{feedbackQuestions[1]}</Form.Label><br/>
-          <RangeSlider
-            value={q2}
-            onChange={e => setQ2(e.target.value)}
-          />
+          <Form.Label>{feedbackQuestions[1]}</Form.Label><br />
+          <span style={{ display: "inline-block" }}>
+            <span style={{ display: "inline-block" }}>0</span>
+            <span style={{ display: "inline-block", margin: "10px" }}>
+              <RangeSlider
+                value={q2}
+                onChange={e => setQ2(e.target.value)}
+              />
+            </span>
+            <span style={{ display: "inline-block" }}>100</span>
+          </span>
         </Form.Group>
         <Button variant="primary" type="submit" onClick={(e) => handleSubmit(e)}>
           Submit

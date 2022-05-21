@@ -56,17 +56,29 @@ const Survey = (props) => {
         <Form.Label>Please enter your opinion about the card above</Form.Label>
         <Form.Group className="mb-3" controlId="q1">
           <Form.Label>{feedbackQuestions[0]}</Form.Label><br/>
-          <RangeSlider
-            value={q1}
-            onChange={e => setQ1(e.target.value)}
-          />
+          <span style={{display: "inline-block"}}>
+            <span style={{ display: "inline-block" }}>0</span>
+            <span style={{ display: "inline-block", margin: "10px" }}>
+              <RangeSlider
+                value={q1}
+                onChange={e => setQ1(e.target.value)}
+              />
+            </span>
+            <span style={{ display: "inline-block" }}>100</span>
+          </span>
         </Form.Group>
         <Form.Group className="mb-3" controlId="q2">
           <Form.Label>{feedbackQuestions[1]}</Form.Label><br/>
-          <RangeSlider
-            value={q2}
-            onChange={e => setQ2(e.target.value)}
-          />
+          <span style={{display: "inline-block"}}>
+            <span style={{ display: "inline-block" }}>0</span>
+            <span style={{ display: "inline-block", margin: "10px" }}>
+            <RangeSlider
+              value={q2}
+              onChange={e => setQ2(e.target.value)}
+            />
+            </span>
+            <span style={{ display: "inline-block" }}>100</span>
+          </span>
         </Form.Group>
         <Button variant="primary" type="submit" onClick={(e) => handleSubmit(e)}>
           Submit
