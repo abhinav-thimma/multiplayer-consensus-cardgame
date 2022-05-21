@@ -1,15 +1,19 @@
-const server = require("http").createServer();
+if (typeof(PhusionPassenger) != 'undefined') {
+  PhusionPassenger.configure({ autoInstall: false });
+}
+
 const express = require("express");
+const app = express();
 const cors = require("cors");
-const axios = require('axios');
+
+const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
   },
 });
 
-const SOCKETIO_PORT = 4000;
-const EXPRESS_PORT = 3500;
+const PORT = 4000;
 
 // Reading the room card configuration file
 const ROOM_CARD_CONFIG = require("./RoomCardConfig.json");
@@ -98,7 +102,6 @@ function getFeedbackQuestions(roomId, gameIdx) {
 
 /*_______________________________________EXPRESS: START______________________________________________*/
 // creating and handling API requests on express server
-const app = express();
 app.use(cors({
   origin: '*'
 }));
@@ -130,8 +133,7 @@ app.get('/getconfig', (req, res) => {
   res.send({"cards": playerCards, "config": CONFIG_MAP.get(roomId), "feedback_questions": feedback_questions});
 });
 
-// starting Express server
-app.listen(EXPRESS_PORT, () => console.log(`Express server listening on port: ${EXPRESS_PORT}!`))
+
 /*_______________________________________EXPRESS: END________________________________________________*/
 
 
@@ -202,7 +204,8 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(SOCKETIO_PORT, () => {
-  console.log(`Socket.io Listening on port ${SOCKETIO_PORT}`);
+server.listen(PORT, () => {
+  console.log(`Socket.io and Express Listening on port ${PORT}`);
 });
+
 /*_______________________________________SOCKET.IO: END________________________________________________*/

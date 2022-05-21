@@ -52,7 +52,7 @@ const Room = (props) => {
       };
       console.log(`config map: ${CONFIG_MAP}`)
       if (CONFIG_MAP == null) {
-        fetch(`http://127.0.0.1:3500/getconfig?roomId=${roomId}&playerNum=${playerNumber}`, options)
+        fetch(`http://127.0.0.1:4000/getconfig?roomId=${roomId}&playerNum=${playerNumber}`, options)
           .then(response => response.json())
           .then(data => {
             console.log(data);

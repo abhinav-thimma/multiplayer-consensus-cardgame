@@ -13,7 +13,7 @@ const AutoAssign = () => {
         'Content-Type': 'application/json',
       }
     };
-    fetch('http://localhost:3500/assignroom', options)
+    fetch('http://localhost:4000/assignroom', options)
       .then(response => response.json())
       .then(data => setRoomid(data.room));
   };
