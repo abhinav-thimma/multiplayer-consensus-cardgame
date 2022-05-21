@@ -78,7 +78,8 @@ function updateConfigMap(roomId) {
         'PLAYER_LIMIT_PER_ROOM': ROOM_CARD_CONFIG['rooms'][i]['player_limit'],
         'GAME_LIMIT': ROOM_CARD_CONFIG['rooms'][i]['game_limit'],
         'ROUND_LIMIT': ROOM_CARD_CONFIG['rooms'][i]['round_limit'],
-        'COUNTDOWN_DURATION': 60000
+        'COUNTDOWN_DURATION': 60000,
+        'DISPLAY_SURVEY_DELAY': ROOM_CARD_CONFIG['rooms'][i]['display_survey_delay'],
       }
       CONFIG_MAP.set(roomId, config);
       break;
@@ -125,9 +126,13 @@ app.get('/getconfig', (req, res) => {
     });
   }
 
+  // fetching all the cards which this player will be assigned
   let playerCards = assignCardsForPlayer(game_idx, roomId, player_idx);
+
+  // updating the config for this particular room
   updateConfigMap(roomId);
 
+  // getting the feedback questions to display in survey page after each round
   let feedback_questions = getFeedbackQuestions(roomId, game_idx);
 
   res.send({"cards": playerCards, "config": CONFIG_MAP.get(roomId), "feedback_questions": feedback_questions});

@@ -6,7 +6,7 @@ import CardConfig from '../CardConfig.json';
 import "./Survey.css";
 
 const Survey = (props) => {
-  let { setPrevroundAndResetTimer, round, cardMessage, roomId, playerNumber, gameNum, feedbackQuestions } = props
+  let { setPrevroundAndResetTimer, round, cardMessage, roomId, playerNumber, gameNum, feedbackQuestions, displayDelay } = props
   const [show, setShow] = useState(false);
   const [ q1, setQ1 ] = React.useState(0);
   const [ q2, setQ2 ] = React.useState(0);
@@ -15,8 +15,8 @@ const Survey = (props) => {
   useEffect(() => {
     setTimeout(() => {
       setShow(true);
-    }, 5000);
-  }, [setShow]);
+    }, displayDelay);
+  }, [setShow, displayDelay]);
 
   const handleSubmit = (event) => {
     event.preventDefault();

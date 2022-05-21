@@ -14,7 +14,8 @@ const DEFAULT_CONFIG = {
   PLAYER_LIMIT_PER_ROOM: 4,
   ROUND_LIMIT: 2,
   GAME_LIMIT: 1,
-  COUNTDOWN_DURATION: 60000
+  COUNTDOWN_DURATION: 60000,
+  DISPLAY_SURVEY_DELAY: 5000
 };
 const COUNTDOWN_DURATION = 60000; // milliseconds
 const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
@@ -119,7 +120,7 @@ const Room = (props) => {
     const message = messages[messages.length - 1].body.substring(0, 6);
     return (
       <div className="popup-box">
-        <Survey setPrevroundAndResetTimer={setPrevroundAndResetTimer} round={round} cardMessage={message} roomId={roomId} playerNumber={playerNumber} gameNum = {gameNum} feedbackQuestions={feedbackQuestions}/>
+        <Survey setPrevroundAndResetTimer={setPrevroundAndResetTimer} round={round} cardMessage={message} roomId={roomId} playerNumber={playerNumber} gameNum = {gameNum} feedbackQuestions={feedbackQuestions} displayDelay={configMap.DISPLAY_SURVEY_DELAY}/>
       </div>
     );
   };

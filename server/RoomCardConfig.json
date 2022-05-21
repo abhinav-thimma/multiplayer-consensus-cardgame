@@ -5,6 +5,7 @@
             "player_limit": 2,
             "round_limit": 2,
             "game_limit": 2,
+            "display_survey_delay": 10000,
             "games": [
                 {
                     "gameid": "Game 1",
@@ -33,6 +34,7 @@
             "player_limit": 4,
             "round_limit": 2,
             "game_limit": 2,
+            "display_survey_delay": 10000,
             "games": [
                 {
                     "gameid": "Game 1",
