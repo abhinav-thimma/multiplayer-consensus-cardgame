@@ -6,7 +6,7 @@ import CardConfig from '../CardConfig.json';
 import "./Survey.css";
 
 const Survey = (props) => {
-  let { setPrevroundAndResetTimer, round, cardMessage, roomId, playerNumber, gameNum } = props
+  let { setPrevroundAndResetTimer, round, cardMessage, roomId, playerNumber, gameNum, feedbackQuestions, displayDelay } = props
   const [show, setShow] = useState(false);
   const [ q1, setQ1 ] = React.useState(0);
   const [ q2, setQ2 ] = React.useState(0);
@@ -15,8 +15,8 @@ const Survey = (props) => {
   useEffect(() => {
     setTimeout(() => {
       setShow(true);
-    }, 5000);
-  }, [setShow]);
+    }, displayDelay);
+  }, [setShow, displayDelay]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -26,7 +26,8 @@ const Survey = (props) => {
       "round_num": round,
       "player_num": "Player " + playerNumber,
       "q1_res": q1,
-      "q2_res": q2
+      "q2_res": q2,
+      "game_end": false
     };
 
     const options = {
@@ -55,18 +56,30 @@ const Survey = (props) => {
         </Row>
         <Form.Label>Please enter your opinion about the card above</Form.Label>
         <Form.Group className="mb-3" controlId="q1">
-          <Form.Label>How novel was the information provided by this card?</Form.Label><br/>
-          <RangeSlider
-            value={q1}
-            onChange={e => setQ1(e.target.value)}
-          />
+          <Form.Label>{feedbackQuestions[0]}</Form.Label><br/>
+          <span style={{display: "inline-block"}}>
+            <span style={{ display: "inline-block" }}>0</span>
+            <span style={{ display: "inline-block", margin: "10px" }}>
+              <RangeSlider
+                value={q1}
+                onChange={e => setQ1(e.target.value)}
+              />
+            </span>
+            <span style={{ display: "inline-block" }}>100</span>
+          </span>
         </Form.Group>
         <Form.Group className="mb-3" controlId="q2">
-          <Form.Label>How useful was the information provided by this card?</Form.Label><br/>
-          <RangeSlider
-            value={q2}
-            onChange={e => setQ2(e.target.value)}
-          />
+          <Form.Label>{feedbackQuestions[1]}</Form.Label><br/>
+          <span style={{display: "inline-block"}}>
+            <span style={{ display: "inline-block" }}>0</span>
+            <span style={{ display: "inline-block", margin: "10px" }}>
+            <RangeSlider
+              value={q2}
+              onChange={e => setQ2(e.target.value)}
+            />
+            </span>
+            <span style={{ display: "inline-block" }}>100</span>
+          </span>
         </Form.Group>
         <Button variant="primary" type="submit" onClick={(e) => handleSubmit(e)}>
           Submit

@@ -1,3 +1,6 @@
+.header-div {
+    margin: 10px;
+}
 .chat-room-container {
     /* position: fixed; */
     left: 0;
@@ -6,7 +9,9 @@
     bottom: 0;
     display: flex;
     flex-direction: row;
-    margin: 60px;
+    margin: 20px;
+    margin-left: 60px;
+    margin-right: 60px;
 }
 
 .popup-box {

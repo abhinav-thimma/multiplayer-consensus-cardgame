@@ -3,8 +3,6 @@ import { useHistory } from "react-router-dom";
 import { Row, Col, Card as BootstrapCard } from 'react-bootstrap';
 import Countdown, { zeroPad, CountdownApi } from "react-countdown";
 
-import CardConfig from '../CardConfig.json';
-
 import useChat from "../useChat";
 import Card from "../Card/Card.jsx";
 import Survey from "../Survey/Survey";
@@ -16,7 +14,8 @@ const DEFAULT_CONFIG = {
   PLAYER_LIMIT_PER_ROOM: 4,
   ROUND_LIMIT: 2,
   GAME_LIMIT: 1,
-  COUNTDOWN_DURATION: 60000
+  COUNTDOWN_DURATION: 60000,
+  DISPLAY_SURVEY_DELAY: 5000
 };
 const COUNTDOWN_DURATION = 60000; // milliseconds
 const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
@@ -35,7 +34,9 @@ const Room = (props) => {
 
   const { roomId, playerNumber } = props.match.params;
   const { messages, round, members, player_number, gameEnd, roomEnd, sendMessage } = useChat(roomId, playerNumber);
-  const cards = CardConfig.cards;
+  const [ cards, setCards ] = useState([]);
+  const [ feedbackQuestions, setFeedbackQuestions ] = useState([]);
+  const [ gameEndQuestions, setGameEndQuestions ] = useState([]);
 
   const [ CONFIG_MAP, setConfigMap ] = useState(null);
   let configMap = CONFIG_MAP ? CONFIG_MAP: DEFAULT_CONFIG;
@@ -44,23 +45,30 @@ const Room = (props) => {
   const [ resetCountdown, setResetCountdown ] = useState(false);
 
   useEffect(() => {
-    const options = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+    if(player_number !== "Unknown") {
+      const options = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      };
+      console.log(`config map: ${CONFIG_MAP}`)
+      if (CONFIG_MAP == null) {
+        fetch(`http://127.0.0.1:4000/getconfig?roomId=${roomId}&playerNum=${playerNumber}`, options)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            return data;
+          })
+          .then(data => {
+            setConfigMap(data.config);
+            setCards(data.cards);
+            setFeedbackQuestions(data.feedback_questions);
+            setGameEndQuestions(data.game_end_questions);
+          });
       }
-    };
-    console.log(`config map: ${CONFIG_MAP}`)
-    if (CONFIG_MAP == null) {
-      fetch(`http://127.0.0.1:5000/roomConfig?roomId=${roomId}`, options)
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          return data;
-        })
-        .then(data => setConfigMap(data));
     }
-  }, [roomId])
+  }, [roomId, CONFIG_MAP, playerNumber, player_number]);
 
   
   let countdownApi = null;
@@ -114,7 +122,7 @@ const Room = (props) => {
     const message = messages[messages.length - 1].body.substring(0, 6);
     return (
       <div className="popup-box">
-        <Survey setPrevroundAndResetTimer={setPrevroundAndResetTimer} round={round} cardMessage={message} roomId={roomId} playerNumber={playerNumber} gameNum = {gameNum}/>
+        <Survey setPrevroundAndResetTimer={setPrevroundAndResetTimer} round={round} cardMessage={message} roomId={roomId} playerNumber={playerNumber} gameNum = {gameNum} feedbackQuestions={feedbackQuestions} displayDelay={configMap.DISPLAY_SURVEY_DELAY}/>
       </div>
     );
   };
@@ -122,13 +130,13 @@ const Room = (props) => {
   if (roomEnd) {
     console.log('roomEnd');
     const message = messages[messages.length - 1].body.substring(0, 6);
-    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: true});
+    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: true, "feedbackQuestions": feedbackQuestions, "gameEndQuestions": gameEndQuestions, "members": members, "currentPlayer": playerNumber});
   }
 
   if (gameEnd) {
     console.log('gameEnd');
     const message = messages[messages.length - 1].body.substring(0, 6);
-    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: false});
+    history.push(`/surveypage/${roomId}/${playerNumber}/?game=${gameNum}`, {"game": gameNum, "card": message, "round": round, finalGame: false, "feedbackQuestions": feedbackQuestions, "gameEndQuestions": gameEndQuestions, "members": members, "currentPlayer": playerNumber});
   }
 
   let renderContent = (<div></div>);
@@ -157,7 +165,7 @@ const Room = (props) => {
       setResetCountdown(true);
     }
     renderContent = (
-      <div>
+      <div className="header-div">
         <Row>
           <Col>
             <h2 className="title">Room: {roomId}</h2>
@@ -182,6 +190,19 @@ const Room = (props) => {
                 </ul>
               </BootstrapCard>
             </Row>
+          </Col>
+          <Col>
+            <div>
+              <p style={{ fontWeight: 'bold', textAlign: 'center', fontSize: '20px' }}>Instructions for the game</p>
+              <ul>
+                <li>You will be playing a card game where there will be multiple players and multiple games.</li>
+                <li>Each game will further be divided into multiple rounds</li>
+                <li>In each round you are required to select one of the cards which is available with you to share information to all the players in your room.</li>
+                <li>You will be allowed to play just one card per round</li>
+                <li>After all the players play their cards for a round, a Survey page would be shown asking questions about your card choice</li>
+                <li>At the end of each game there would be additional questions regarding the entire game.</li>
+              </ul>
+            </div >
           </Col>
         </Row>
 

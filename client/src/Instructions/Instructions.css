@@ -1,0 +1,18 @@
+.main-container {
+    width: 80%;
+    margin: 10%;
+    margin-top: 5%;
+}
+
+.enter-room-button {
+    width: 300px;
+    margin-top: 20px;
+    padding: 12px 12px;
+    font-size: 20px;
+    background: #31a24c;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 7px;
+}

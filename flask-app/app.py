@@ -4,6 +4,7 @@ from db_util import DBUtil
 import json
  
 app = Flask(__name__)
+application = app
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
@@ -73,17 +74,6 @@ def store_player_moves():
     resp.headers['Content-Type'] = 'application/json'
 
     return resp
-
-@app.route('/roomConfig', methods=['GET'])
-@cross_origin()
-def get_room_config():
-    args = request.args
-    room_id = args.get("roomId")
-
-    result = dbUtil.get_room_config(room_id)
-
-    return result
-
 
 if __name__ == '__main__':
     app.run(debug=True)
