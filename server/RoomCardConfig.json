@@ -1,8 +1,9 @@
 {
     "rooms": [
         {
-            "roomid": "a",
-            "player_limit": 2,
+            "roomid": "w",
+            "player_limit": 5,
+            "computer_players": 2,
             "round_limit": 2,
             "game_limit": 2,
             "display_survey_delay": 10000,
@@ -12,8 +13,18 @@
                     "cards": [
                         {"name": "Card 1.1", "description": "Card 1.1 description", "player": 0},
                         {"name": "Card 1.2", "description": "Card 1.2 description", "player": 0},
-                        {"name": "Card 1.3", "description": "Card 1.3 description", "player": 1},
-                        {"name": "Card 1.4", "description": "Card 1.4 description", "player": 1}
+                        {"name": "Card 1.3", "description": "Card 1.3 description", "player": 2},
+                        {"name": "Card 1.4", "description": "Card 1.4 description", "player": 2},
+                        {"name": "Card 1.5", "description": "Card 1.5 description", "player": 3},
+                        {"name": "Card 1.6", "description": "Card 1.6 description", "player": 3},
+                        {"name": "Card 1.7", "description": "Card 1.5 description", "player": 4},
+                        {"name": "Card 1.8", "description": "Card 1.6 description", "player": 4}
+                    ],
+                    "comp_cards": [
+                        {"name": "C Card 1.1", "description": "C Card 1.1 description", "round": 0},
+                        {"name": "C Card 1.2", "description": "C Card 1.2 description", "round": 0},
+                        {"name": "C Card 1.3", "description": "C Card 1.3 description", "round": 1},
+                        {"name": "C Card 1.4", "description": "C Card 1.4 description", "round": 1}
                     ],
                     "feedback_questions": ["Question 1.1", "Question 1.2"],
                     "game_end_survey": ["Game end survey Question 1.1", "Game end survey Question 1.2"]
@@ -22,9 +33,19 @@
                     "gameid": "Game 2",
                     "cards": [
                         {"name": "Card 2.1", "description": "Card 2.1 description", "player": 0},
-                        {"name": "Card 2.3", "description": "Card 2.3 description", "player": 0},
-                        {"name": "Card 2.2", "description": "Card 2.2 description", "player": 1},
-                        {"name": "Card 2.4", "description": "Card 2.4 description", "player": 1}
+                        {"name": "Card 2.2", "description": "Card 2.2 description", "player": 0},
+                        {"name": "Card 2.3", "description": "Card 2.3 description", "player": 2},
+                        {"name": "Card 2.4", "description": "Card 2.4 description", "player": 2},
+                        {"name": "Card 2.5", "description": "Card 2.5 description", "player": 3},
+                        {"name": "Card 2.6", "description": "Card 2.6 description", "player": 3},
+                        {"name": "Card 2.7", "description": "Card 2.5 description", "player": 4},
+                        {"name": "Card 2.8", "description": "Card 2.6 description", "player": 4}
+                    ],                    
+                    "comp_cards": [
+                        {"name": "C Card 2.1", "description": "C Card 2.1 description", "round": 0},
+                        {"name": "C Card 2.2", "description": "C Card 2.2 description", "round": 0},
+                        {"name": "C Card 2.3", "description": "C Card 2.3 description", "round": 1},
+                        {"name": "C Card 2.4", "description": "C Card 2.4 description", "round": 1}
                     ],
                     "feedback_questions": ["Question 2.1", "Question 2.2"],
                     "game_end_survey": ["Game end survey Question 2.1", "Game end survey Question 2.2"]
@@ -32,8 +53,9 @@
             ]
         },
         {
-            "roomid": "w",
-            "player_limit": 4,
+            "roomid": "a",
+            "player_limit": 2,
+            "computer_players": 1,
             "round_limit": 2,
             "game_limit": 2,
             "display_survey_delay": 10000,
@@ -42,13 +64,11 @@
                     "gameid": "Game 1",
                     "cards": [
                         {"name": "Card 1.1", "description": "Card 1.1 description", "player": 0},
-                        {"name": "Card 1.2", "description": "Card 1.2 description", "player": 0},
-                        {"name": "Card 1.3", "description": "Card 1.3 description", "player": 1},
-                        {"name": "Card 1.4", "description": "Card 1.4 description", "player": 1},
-                        {"name": "Card 1.5", "description": "Card 1.5 description", "player": 2},
-                        {"name": "Card 1.6", "description": "Card 1.6 description", "player": 2},
-                        {"name": "Card 1.7", "description": "Card 1.7 description", "player": 3},
-                        {"name": "Card 1.8", "description": "Card 1.8 description", "player": 3}
+                        {"name": "Card 1.2", "description": "Card 1.2 description", "player": 0}
+                    ],
+                    "comp_cards": [
+                        {"name": "C Card 1.1", "description": "C Card 1.1 description", "round": 0},
+                        {"name": "C Card 1.2", "description": "C Card 1.2 description", "round": 0}
                     ],
                     "feedback_questions": ["Question 1.1", "Question 1.2"],
                     "game_end_survey": ["Game end survey Question 1.1", "Game end survey Question 1.2"]
@@ -57,13 +77,11 @@
                     "gameid": "Game 2",
                     "cards": [
                         {"name": "Card 2.1", "description": "Card 2.1 description", "player": 0},
-                        {"name": "Card 2.3", "description": "Card 2.3 description", "player": 0},
-                        {"name": "Card 2.2", "description": "Card 2.2 description", "player": 1},
-                        {"name": "Card 2.4", "description": "Card 2.4 description", "player": 1},
-                        {"name": "Card 2.5", "description": "Card 2.5 description", "player": 2},
-                        {"name": "Card 2.6", "description": "Card 2.6 description", "player": 2},
-                        {"name": "Card 2.7", "description": "Card 2.7 description", "player": 3},
-                        {"name": "Card 2.8", "description": "Card 2.8 description", "player": 3}
+                        {"name": "Card 2.3", "description": "Card 2.3 description", "player": 0}
+                    ],
+                    "comp_cards": [
+                        {"name": "C Card 2.1", "description": "C Card 2.1 description", "round": 0},
+                        {"name": "C Card 2.2", "description": "C Card 2.2 description", "round": 0}
                     ],
                     "feedback_questions": ["Question 2.1", "Question 2.2"],
                     "game_end_survey": ["Game end survey Question 2.1", "Game end survey Question 2.2"]
