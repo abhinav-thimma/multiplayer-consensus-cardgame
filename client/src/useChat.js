@@ -72,6 +72,7 @@ const useChat = (roomId, playerNumber) => {
       let messsageJson = {
         body: messageBody + " | sent by: " + player_number,
         senderId: socketRef.current.id,
+        computerPlayer: false,
       };
       socketRef.current.emit(NEW_CARD_MESSAGE_EVENT, messsageJson);
 

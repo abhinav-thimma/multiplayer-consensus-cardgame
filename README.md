@@ -123,3 +123,4 @@ The following is a description on how to change/ add/ remove different component
     - Adding or removing such blocks from the configuration will allow us to add or remove rooms into which users can join. 
 
 
+Computer player example: https://stackoverflow.com/questions/30199933/socket-io-fake-a-socket
