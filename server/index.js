@@ -131,6 +131,20 @@ function getGameEndQuestions(roomId, gameIdx) {
   return game_end_questions;
 }
 
+function getGameDescription(roomId, gameIdx) {
+  let game_description = [];
+
+  for (let i = 0; i < ROOM_CARD_CONFIG.rooms.length; i++) {
+    let current_room_id = ROOM_CARD_CONFIG.rooms[i].roomid;
+    if (current_room_id === roomId) {
+      let current_game = ROOM_CARD_CONFIG.rooms[i].games[gameIdx];
+      game_description = current_game.game_description;
+      break;
+    }
+  }
+  return game_description;
+}
+
 /*_______________________________________EXPRESS: START______________________________________________*/
 // creating and handling API requests on express server
 app.use(cors({
@@ -167,7 +181,9 @@ app.get('/getconfig', (req, res) => {
 
   let game_end_questions = getGameEndQuestions(roomId, game_idx);
 
-  res.send({"cards": playerCards, "config": CONFIG_MAP.get(roomId), "feedback_questions": feedback_questions, "game_end_questions": game_end_questions});
+  let game_description = getGameDescription(roomId, game_idx);
+
+  res.send({"cards": playerCards, "config": CONFIG_MAP.get(roomId), "feedback_questions": feedback_questions, "game_end_questions": game_end_questions, "game_description": game_description});
 });
 
 

@@ -37,6 +37,16 @@ const Room = (props) => {
   const [ cards, setCards ] = useState([]);
   const [ feedbackQuestions, setFeedbackQuestions ] = useState([]);
   const [ gameEndQuestions, setGameEndQuestions ] = useState([]);
+  const [ gameDescription, setGameDescription ] = useState([]);
+  const [ isHovering, setIsHovering ] = useState(false);
+
+  const handleMouseOver = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+  };
 
   const [ CONFIG_MAP, setConfigMap ] = useState(null);
   let configMap = CONFIG_MAP ? CONFIG_MAP: DEFAULT_CONFIG;
@@ -65,6 +75,7 @@ const Room = (props) => {
             setCards(data.cards);
             setFeedbackQuestions(data.feedback_questions);
             setGameEndQuestions(data.game_end_questions);
+            setGameDescription(data.game_description);
           });
       }
     }
@@ -172,6 +183,10 @@ const Room = (props) => {
             <h2 className="title">Round: {round}</h2>
             <h2 className="title">Player: {player_number}</h2>
             <h2 className="title">Game: {gameNum}</h2>
+            <h2 className="title" onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+              Game Description:  
+            </h2>
+            {isHovering && <div className="title">{gameDescription}</div>}
             <div>
               <h2 className="title">Time:
                 <Countdown ref={setCountdownRef} date={countdownDuration} key={countdownDuration} renderer={countdownRenderer} onComplete={handleCountdownEnd} />

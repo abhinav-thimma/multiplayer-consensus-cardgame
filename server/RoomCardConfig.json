@@ -10,6 +10,7 @@
             "games": [
                 {
                     "gameid": "Game 1",
+                    "game_description": "Game 1 description",
                     "cards": [
                         {"name": "Card 1.1", "description": "Card 1.1 description", "player": 0},
                         {"name": "Card 1.2", "description": "Card 1.2 description", "player": 0},
@@ -31,6 +32,7 @@
                 },
                 {
                     "gameid": "Game 2",
+                    "game_description": "Game 2 description",
                     "cards": [
                         {"name": "Card 2.1", "description": "Card 2.1 description", "player": 0},
                         {"name": "Card 2.2", "description": "Card 2.2 description", "player": 0},
@@ -62,6 +64,7 @@
             "games": [
                 {
                     "gameid": "Game 1",
+                    "game_description": "Game 1 description",
                     "cards": [
                         {"name": "Card 1.1", "description": "Card 1.1 description", "player": 0},
                         {"name": "Card 1.2", "description": "Card 1.2 description", "player": 0}
@@ -75,6 +78,7 @@
                 },
                 {
                     "gameid": "Game 2",
+                    "game_description": "Game 2 description",
                     "cards": [
                         {"name": "Card 2.1", "description": "Card 2.1 description", "player": 0},
                         {"name": "Card 2.3", "description": "Card 2.3 description", "player": 0}
